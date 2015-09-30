@@ -345,7 +345,7 @@ def doGetTickets(token, customer_id)
   end
  end
 
- # doPostBuyTicketMerchant - function for purchasing tickets with merchant ID
+# doPostBuyTicketMerchant - function for purchasing tickets with merchant ID
 
  def doPostBuyTickets(token, merchant_id, customer_id, pool_id, selections, stake, cost, currency, poc)
 
@@ -368,6 +368,97 @@ def doGetTickets(token, customer_id)
   end
  end
 
+# doGetPoolOffersByID - function for pulling back all available offers for specific pool
+
+ def doGetPoolOffersByID(token, pool_id)
+
+  getcommand = "curl --header \"Authorization: Bearer #{token}\" --include --request GET http://api.sandbox.colossusbets.com/v2/pools/#{pool_id}/offers.json"
+ 
+  stdin = ""
+  stdout = ""
+  stderr = ""
+
+  Open3.popen3(getcommand) do |stdin, stdout, stderr|
+
+  result = stdout.read
+
+  stdin.close
+  stdout.close
+  stderr.close
+
+  return result
+
+  end
+ end
+
+# doGetOffer - function for pulling back single offer by ID 
+
+ def doGetOffer(token, offer_id)
+
+  getcommand = "curl --header \"Authorization: Bearer #{token}\" --include --request GET http://api.sandbox.colossusbets.com/v2/offers/#{offer_id}.json"
+
+  stdin = ""
+  stdout = ""
+  stderr = ""
+
+  Open3.popen3(getcommand) do |stdin, stdout, stderr|
+
+  result = stdout.read
+
+  stdin.close
+  stdout.close
+  stderr.close
+
+  return result
+
+  end
+ end
+
+# doPostOffer - function for accepting an offer
+
+ def doPostOffer(token, offer_id, accept_fraction, remaining_fraction, accept_amount, merchant_offer_acceptance_ref)
+
+  postcommand = "curl --header \"Authorization: Bearer #{token}\" --include --request POST http://api.sandbox.colossusbets.com/v2/offers/#{offer_id}/accept.json?accept_fraction=#{accept_fraction}&remaining_fraction=#{remaining_fraction}&accept_amount=#{accept_amount}&merchant_offer_acceptance_ref=#{merchant_offer_acceptance_ref}"
+
+  stdin = ""
+  stdout = ""
+  stderr = ""
+
+  Open3.popen3(postcommand) do |stdin, stdout, stderr|
+
+  result = stdout.read
+
+  stdin.close
+  stdout.close
+  stderr.close
+
+  return result
+ 
+  end
+ end
+
+# doGetUpdates - function for pulling back offer updates after a certain time
+
+ def doGetUpdates(token, from_date)
+ 
+  getcommand = "curl --header \"Authorization: Bearer #{token}\" --include --request GET http://api.sandbox.colossusbets.com/v2/updates.json?from_date=#{from_date}"
+ 
+  stdin = ""
+  stdout = ""
+  stderr = ""
+
+  Open3.popen3(getcommand) do |stdin, stdout, stderr|
+
+  result = stdout.read
+
+  stdin.close
+  stdout.close
+  stderr.close
+
+  return result
+ 
+  end
+ end
 
 
 end
