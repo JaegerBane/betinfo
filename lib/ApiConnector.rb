@@ -6,6 +6,10 @@ require 'json'
 
 class ApiConnector
 
+# ApiConnector class - provides individual functions that use curl commands to communicate with ColossusBets API
+# All commands return unparsed JSON result when ran, so that class can be invoked in controllers to retrieve data
+
+# login - testing function for curl commands
 
 def login()
 
@@ -133,6 +137,236 @@ def doDeleteSessions(token)
   end
  end
 
+# doGetPools - function for pulling back all live pools (grouped or ungrouped)
+
+def doGetPools(token, ungrouped)
+
+  getcommand = "curl --header \"Authorization: Bearer #{token}\" --include --request GET http://api.sandbox.colossusbets.com/v2/pools.json?ungrouped=#{ungrouped}"
+
+  stdin = ""
+  stdout = ""
+  stderr = ""
+
+  Open3.popen3(getcommand) do |stdin, stdout, stderr|
+
+  result = stdout.read
+
+  stdin.close
+  stdout.close
+  stderr.close
+
+  return result
+
+  end
+ end
+
+# doGetPoolByID - function for pulling back pool via ID
+
+def doGetPoolByID(token, id)
+
+  getcommand = "curl --header \"Authorization: Bearer #{token}\" --include --request GET http://api.sandbox.colossusbets.com/v2/pools/#{id}.json"
+
+  stdin = ""
+  stdout = ""
+  stderr = ""
+
+  Open3.popen3(getcommand) do |stdin, stdout, stderr|
+
+  result = stdout.read
+
+  stdin.close
+  stdout.close
+  stderr.close
+
+  return result
+
+  end
+ end
+
+# doGetPoolSmartPick - function for pulling back smart picks for a given pool ID
+
+def doGetPoolSmartPick(token, id, lines)
+
+  getcommand = "curl --header \"Authorization: Bearer #{token}\" --include --request GET http://api.sandbox.colossusbets.com/v2/pools/#{id}/smart_pick.json?lines=#{lines}"
+
+  stdin = ""
+  stdout = ""
+  stderr = ""
+
+  Open3.popen3(getcommand) do |stdin, stdout, stderr|
+
+  result = stdout.read
+
+  stdin.close
+  stdout.close
+  stderr.close
+
+  return result
+
+  end
+
+ end
+
+# doGetPoolSettlement - function for returning list of tickets that require settlement after pool closes
+
+def doGetPoolSettlement(token, id, payout_filter)
+
+ getcommand = "curl --header \"Authorization: Bearer #{token}\" --include --request GET http://api.sandbox.colossusbets.com/v2/pools/#{id}/settlement.json"
+
+  stdin = ""
+  stdout = ""
+  stderr = ""
+
+  Open3.popen3(getcommand) do |stdin, stdout, stderr|
+
+  result = stdout.read
+
+  stdin.close
+  stdout.close
+  stderr.close
+
+  return result
+
+  end
+ end
+
+# doPostPoolNotifications - function for notifying ColossusBets after pool closes
+
+def doPostPoolNotifications(token, id)
+
+ postcommand = "curl --header \"Authorization: Bearer #{token}\" --include --request POST http://api.sandbox.colossusbets.com/v2/pools/#{id}/settlement.json"
+
+  stdin = ""
+  stdout = ""
+  stderr = ""
+
+  Open3.popen3(postcommand) do |stdin, stdout, stderr|
+
+  result = stdout.read
+
+  stdin.close
+  stdout.close
+  stderr.close
+
+  return result
+
+  end
+ end
+
+# doGetTickets - function for returning customer tickets, using defaults
+
+def doGetTickets(token, customer_id)
+
+ getcommand = "curl --header \"Authorization: Bearer #{token}\" --include --request GET http://api.sandbox.colossusbets.com/v2/tickets.json?customer_id=#{customer_id}"
+
+  stdin = ""
+  stdout = ""
+  stderr = ""
+
+  Open3.popen3(getcommand) do |stdin, stdout, stderr|
+
+  result = stdout.read
+
+  stdin.close
+  stdout.close
+  stderr.close
+
+  return result
+
+  end
+ end
+
+# doGetTicketsOptions - function for returning customer tickets using options
+
+ def doGetTicketsOptions(token, customer_id, type, from_date, to_date, page, per)
+
+  getcommand = "curl --header \"Authorization: Bearer #{token}\" --include --request GET http://api.sandbox.colossusbets.com/v2/tickets.json?customer_id=#{customer_id}&type=#{type}&from_date=#{from_date}&to_date=#{to_date}&page=#{page}&per=#{per}"
+ 
+  stdin = ""
+  stdout = ""
+  stderr = ""
+
+  Open3.popen3(getcommand) do |stdin, stdout, stderr|
+
+  result = stdout.read
+
+  stdin.close
+  stdout.close
+  stderr.close
+
+  return result
+
+  end
+ end
+
+# doGetTicketByID - function for returning ticket via ticket ID
+
+ def doGetTicketByID(token, ticket_id)
+ 
+  getcommand = "curl --header \"Authorization: Bearer #{token}\" --include --request GET http://api.sandbox.colossusbets.com/v2/tickets/#{ticket_id}.json"
+
+  stdin = ""
+  stdout = ""
+  stderr = ""
+
+  Open3.popen3(getcommand) do |stdin, stdout, stderr|
+
+  result = stdout.read
+
+  stdin.close
+  stdout.close
+  stderr.close
+
+  return result
+
+  end
+ end
+
+# doPostBuyTicket - function for purchasing tickets
+
+ def doPostBuyTickets(token, customer_id, pool_id, selections, stake, cost, currency, poc)
+
+  postcommand = "curl --header \"Authorization: Bearer #{token}\" --include --request POST http://api.sandbox.colossusbets.com/v2/tickets.json?customer_id=#{customer_id}&pool_id=#{pool_id}&selections=#{selections}&stake=#{stake}&cost=#{cost}&currency=#{currency}&poc=#{poc}" 
+
+  stdin = ""
+  stdout = ""
+  stderr = ""
+
+  Open3.popen3(getcommand) do |stdin, stdout, stderr|
+
+  result = stdout.read
+
+  stdin.close
+  stdout.close
+  stderr.close
+
+  return result
+
+  end
+ end
+
+ # doPostBuyTicketMerchant - function for purchasing tickets with merchant ID
+
+ def doPostBuyTickets(token, merchant_id, customer_id, pool_id, selections, stake, cost, currency, poc)
+
+  postcommand = "curl --header \"Authorization: Bearer #{token}\" --include --request POST http://api.sandbox.colossusbets.com/v2/tickets.json?merchant_id=#{merchant_id}&customer_id=#{customer_id}&pool_id=#{pool_id}&selections=#{selections}&stake=#{stake}&cost=#{cost}&currency=#{currency}&poc=#{poc}"
+
+  stdin = ""
+  stdout = ""
+  stderr = ""
+
+  Open3.popen3(postcommand) do |stdin, stdout, stderr|
+
+  result = stdout.read
+
+  stdin.close
+  stdout.close
+  stderr.close
+
+  return result
+
+  end
+ end
 
 
 
