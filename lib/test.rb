@@ -19,6 +19,10 @@ def go()
 
   handshake.login()
 
+ # handshake.doPostSessions()
+
+ # handshake.doGetSessions('LymBBjjSqBUSLCqevrGw0A')
+
 end
 
 
